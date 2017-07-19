@@ -52,7 +52,6 @@ def generator(samples, batch_size=32):
 
                 crop_img_top_ = center_image[65:160, 0:320, :]  # Crop from x, y, w, h -> 100, 200, 300, 400
                 crop_img_bot_ = crop_img_top_[0:75, 0:320, :]
-                # resized = cv2.resize(crop_img_bot_, (192, 45))
                 resized_image = cv2.resize(crop_img_bot_, (200, 66))
                 blur = cv2.GaussianBlur(resized_image, (5, 5), 0)
                 images.append(blur / 255.0 - 0.5)
@@ -84,7 +83,7 @@ model = Sequential()
 # model.add(BatchNormalization())
 model.add(Conv2D(24, kernel5_s, strides=(2, 2), input_shape=(66, 200, 3), activation='relu'))#strides=(2, 2),
 model.add(Conv2D(36, kernel5_s, strides=(2, 2), activation='relu'))#strides=(2, 2),
-model.add(Conv2D(48, kernel3_s, strides=(2, 2), activation='relu'))#strides=(2, 2),
+model.add(Conv2D(48, kernel5_s, strides=(2, 2), activation='relu'))#strides=(2, 2),
 model.add(Conv2D(64, kernel3_s, activation='relu'))
 model.add(Conv2D(64, kernel3_s, activation='relu'))
 model.add(Dropout(0.2))
@@ -97,29 +96,11 @@ model.add(Dense(10))#10
 model.add(Dropout(0.5))
 model.add(Dense(1))
 
-# # Keras model construction part
-# model = Sequential()
-# # Preprocess incoming data, centered around zero with small standard deviation
-# model.add(Cropping2D(cropping=((65, 25), (0, 0)), input_shape=(160, 320, 3)))
-# model.add(MaxPooling2D(pool_size=pool_2s))
-# model.add(Conv2D(64, kernel7_s,  activation='relu'))
-# # model.add(MaxPooling2D(pool_size=pool_s))
-# model.add(Conv2D(128, kernel3_s, activation='relu'))
-# model.add(MaxPooling2D(pool_size=pool_2s))
-# model.add(Dropout(0.5))
-# model.add(Conv2D(256, kernel3_s, activation='relu'))
-# model.add(Conv2D(64, kernel7_s,  activation='relu'))
-# model.add(MaxPooling2D(pool_size=pool_4s))
-# model.add(Flatten())
-# model.add(Dense(512))
-# model.add(Dense(128))
-# model.add(Dense(1))
-
 model.summary()
 model.compile(loss='mse', optimizer='adam')
 history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples),
                                      validation_data=validation_generator,
-                                     nb_val_samples=len(validation_samples), nb_epoch=3, verbose=1)
+                                     nb_val_samples=len(validation_samples), nb_epoch=2, verbose=1)
 
 model.save('model.h5')
 
