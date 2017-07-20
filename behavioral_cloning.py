@@ -6,6 +6,7 @@ from keras.layers.core import Dense, Activation, Flatten, Dropout
 from keras.layers.convolutional import Convolution2D, Cropping2D, Conv2D
 from keras.layers.pooling import MaxPooling2D
 from keras.layers.normalization import BatchNormalization
+from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 import random
@@ -20,9 +21,8 @@ with open('data/driving_log.csv') as csvfile:
             samples.append(line)
         first = False
 
-train_samples, validation_samples = train_test_split(samples, test_size=0.2)
+train_samples, validation_samples = train_test_split(samples, test_size=0.2, random_state=42)
 correction = 0.2
-
 
 def bright_trans(img):
     img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
@@ -30,11 +30,11 @@ def bright_trans(img):
     return cv2.cvtColor(img, cv2.COLOR_HSV2RGB)
 
 
-def generator(samples, batch_size=32):
+def generator(samples, batch_size=32, validation=False):
     num_samples = len(samples)
     while 1:
         # Loop forever so the generator never terminates
-        shuffle(samples)
+        samples = shuffle(samples)
         for offset in range(0, num_samples, batch_size):
             batch_samples = samples[offset:offset + batch_size]
 
@@ -52,8 +52,12 @@ def generator(samples, batch_size=32):
 
                 crop_img_top_ = center_image[65:160, 0:320, :]  # Crop from x, y, w, h -> 100, 200, 300, 400
                 crop_img_bot_ = crop_img_top_[0:75, 0:320, :]
-                resized_image = cv2.resize(crop_img_bot_, (200, 66))
+                resized_image = cv2.resize(crop_img_bot_, (200, 66), interpolation = cv2.INTER_AREA)
                 blur = cv2.GaussianBlur(resized_image, (5, 5), 0)
+
+                if not validation:
+                    blur = bright_trans(blur)
+
                 images.append(blur / 255.0 - 0.5)
                 angles.append(center_angle)
 
@@ -65,7 +69,7 @@ def generator(samples, batch_size=32):
 
 # compile and train the model using the generator function
 train_generator = generator(train_samples, batch_size=32)
-validation_generator = generator(validation_samples, batch_size=32)
+validation_generator = generator(validation_samples, batch_size=32, validation=True)
 
 # channel, row, column = 3, 90, 320  # Trimmed image format
 
@@ -89,18 +93,17 @@ model.add(Conv2D(64, kernel3_s, activation='relu'))
 model.add(Dropout(0.2))
 model.add(Flatten())
 model.add(Dense(100))#100
-model.add(Dropout(0.5))
 model.add(Dense(50))#50
-model.add(Dropout(0.5))
 model.add(Dense(10))#10
 model.add(Dropout(0.5))
 model.add(Dense(1))
 
 model.summary()
-model.compile(loss='mse', optimizer='adam')
+adam = Adam(lr=0.01)
+model.compile(loss='mse', optimizer=adam)
 history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples),
                                      validation_data=validation_generator,
-                                     nb_val_samples=len(validation_samples), nb_epoch=2, verbose=1)
+                                     nb_val_samples=len(validation_samples), nb_epoch=3, verbose=1)
 
 model.save('model.h5')
 
