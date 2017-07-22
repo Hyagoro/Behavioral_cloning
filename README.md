@@ -124,6 +124,7 @@ There is steps for preprocedding images:
 - Crop the top (65 px) and the bottom (20 px) to remove the car and le landscape.
 - Apply Gaussian blur to remove for exemple concrete texture complexity
 - Add random bright to learn the track with more light or shadow
+- Transform the image from RGB to HSV
 - And finaly normalize the image by dividing by 255 minus 0.5.
 
 ![alt text][image3]
