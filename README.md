@@ -20,7 +20,8 @@ The result of this project (Youtube video) can be found [here](https://youtu.be/
 [image4]: ./readme_data/Figure_2.png "Augmented Image 2"
 [image5]: ./readme_data/Figure_3.png "Augmented Image 3"
 [image6]: ./readme_data/left_2017_07_19_21_53_34_198.jpg "Left Image"
-[image7]: ./readme_data/right_2017_07_19_21_43_08_971.jpg "Right Image" 
+[image7]: ./readme_data/right_2017_07_19_21_43_08_971.jpg "Right Image"
+[image8]: ./readme_data/cnn-architecture-624x890.png "CNN Architecture" 
 
 ---
 
@@ -76,33 +77,34 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 Here is a visualization of the architecture :
 
+![alt text][image8]
 _________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-conv2d_1 (Conv2D)            (None, 31, 98, 24)        1824      
+Layer (type)                 Output Shape              Param #
 _________________________________________________________________
-conv2d_2 (Conv2D)            (None, 14, 47, 36)        21636     
+conv2d_1 (Conv2D)            (None, 31, 98, 24)        1824
 _________________________________________________________________
-conv2d_3 (Conv2D)            (None, 5, 22, 48)         43248     
+conv2d_2 (Conv2D)            (None, 14, 47, 36)        21636
 _________________________________________________________________
-conv2d_4 (Conv2D)            (None, 3, 20, 64)         27712     
+conv2d_3 (Conv2D)            (None, 5, 22, 48)         43248
 _________________________________________________________________
-conv2d_5 (Conv2D)            (None, 1, 18, 64)         36928     
+conv2d_4 (Conv2D)            (None, 3, 20, 64)         27712
 _________________________________________________________________
-dropout_1 (Dropout)          (None, 1, 18, 64)         0         
+conv2d_5 (Conv2D)            (None, 1, 18, 64)         36928
 _________________________________________________________________
-flatten_1 (Flatten)          (None, 1152)              0         
+dropout_1 (Dropout)          (None, 1, 18, 64)         0
 _________________________________________________________________
-dense_1 (Dense)              (None, 100)               115300    
+flatten_1 (Flatten)          (None, 1152)              0
 _________________________________________________________________
-dense_2 (Dense)              (None, 50)                5050      
+dense_1 (Dense)              (None, 100)               115300
 _________________________________________________________________
-dense_3 (Dense)              (None, 10)                510       
+dense_2 (Dense)              (None, 50)                5050 
 _________________________________________________________________
-dropout_2 (Dropout)          (None, 10)                0         
+dense_3 (Dense)              (None, 10)                510
 _________________________________________________________________
-dense_4 (Dense)              (None, 1)                 11        
-=================================================================
+dropout_2 (Dropout)          (None, 10)                0
+_________________________________________________________________
+dense_4 (Dense)              (None, 1)                 11
+_________________________________________________________________
 
 
 #### Creation of the Training Set & Training Process
