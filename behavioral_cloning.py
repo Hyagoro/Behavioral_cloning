@@ -44,6 +44,8 @@ def generator(samples_, batch_size=32, validation=False):
                 rnd = random.randrange(0, 3, 1)
                 name = 'data/IMG/' + batch_sample[rnd].split('/')[-1]
                 center_image = cv2.imread(name)
+                b, v, r = cv2.split(center_image)
+                center_image = cv2.merge([r, v, b])
                 center_angle = float(batch_sample[3])
                 # Apply right correction
                 if rnd == 1:
