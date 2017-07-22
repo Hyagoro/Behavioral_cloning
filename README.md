@@ -78,6 +78,7 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 Here is a visualization of the architecture :
 
 ![alt text][image8]
+
 	_________________________________________________________________
 	Layer (type)                 Output Shape              Param #
 	=================================================================
