@@ -66,7 +66,8 @@ def telemetry(sid, data):
         crop_img_bot_ = crop_img_top_[0:75, 0:320, :]
         resized_image = cv2.resize(crop_img_bot_, (200, 66))
         blur = cv2.GaussianBlur(resized_image, (5, 5), 0)
-        image_array = blur / 255.0 - 0.5
+        aze = cv2.cvtColor(resized_image, cv2.COLOR_RGB2HSV)
+        image_array = aze / 255.0 - 0.5
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
 
         throttle = controller.update(float(speed))

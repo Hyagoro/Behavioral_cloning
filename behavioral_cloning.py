@@ -22,7 +22,7 @@ with open('data/driving_log.csv') as csvfile:
         first = False
 
 train_samples, validation_samples = train_test_split(samples, test_size=0.2, random_state=42)
-correction = 0.2
+correction = 0.25
 
 def bright_trans(img):
     img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
